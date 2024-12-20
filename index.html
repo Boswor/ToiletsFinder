@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+    <title>Toilets Finder</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" href="../../src/css/style.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+
+<body>
+    <script type="module" src="../../src/js/main.js"></script>
+
+    <div class="container">
+
+        <div class="btn btn--geoloc btn--wide">
+            <span>Me géolocaliser et chercher !</span>
+        </div>
+
+        <div class="error">
+        </div>
+
+        <div class="map-container">
+            <div id="map"> </div>
+            <div class="loader">
+
+            </div>
+        </div>
+
+
+
+        <div class="rayon-container">
+            <span>
+                Rayon de recherche :
+            </span>
+            <div class="range-slider">
+                <input type="range" class="input-radius" id="radius" min="1" max="5000" value="250" step="1" />
+                <div class="input-radius-value" id="radius-value">250 m</div>
+            </div>
+        </div>
+
+        <div class="coordinates-container" data-lat="" data-lon="">
+            Vos coordonnées&nbsp;: <span class="coordinates">N--°--.---&nbsp;W---°--.---</span>
+        </div>
+
+        <div class="btn-group">
+            <div class="btn btn--secondary btn--center">
+                <span>Recentrer</span>
+            </div>
+
+            <div class="btn btn--secondary btn--coords">
+                <span>Définir un point manuellement</span>
+            </div>
+
+            <div class="btn btn--find btn--wide">
+                <span>Rechercher</span>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,247 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 10px;
+}
+
+body {
+  overflow-x: clip;
+  overflow-y: auto;
+  min-width: 100vw;
+  min-height: 100vh;
+  background: #fff;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  position: relative;
+}
+body.is-map-clickable::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+body.is-map-clickable .map-container,
+body.is-map-clickable .btn--coords {
+  z-index: 1000;
+}
+
+@media screen and (max-width: 768px) {
+  .hide-vm {
+    display: none;
+  }
+}
+
+.container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 5rem;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+@media screen and (max-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.map-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: calc(100vh - 17rem);
+  aspect-ratio: 1920/1080;
+  margin-top: 2rem;
+}
+.map-container #map {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: unset;
+  min-height: unset;
+  cursor: pointer;
+}
+.map-container .leaflet-popup-content {
+  font-size: 1.6rem;
+}
+
+.range-slider {
+  position: relative;
+  width: 100%;
+  max-width: 30rem;
+  margin: 4rem 0 2rem;
+}
+.range-slider input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 0.8rem;
+  background-color: #ddd;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+.range-slider input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 2rem;
+  height: 2rem;
+  background: #811EB3;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+.range-slider input[type=range]::-moz-range-thumb {
+  width: 2rem;
+  height: 2rem;
+  background: #811EB3;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.range-slider input[type=range]::-ms-thumb {
+  width: 2rem;
+  height: 2rem;
+  background: #811EB3;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.range-slider input[type=range]:hover {
+  background: #ccc;
+}
+.range-slider .input-radius-value {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #811EB3;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.btn {
+  border-radius: 5px;
+  background: #811EB3;
+  padding: 1rem;
+  width: -moz-fit-content;
+  width: fit-content;
+  cursor: pointer;
+  border: 2px solid #811EB3;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+@media screen and (max-width: 1024px) {
+  .btn {
+    width: 100%;
+  }
+}
+.btn span {
+  color: #fff;
+  text-align: center;
+}
+.btn--secondary {
+  background-color: #fff;
+}
+.btn--secondary span {
+  color: #811EB3;
+}
+.btn--wide {
+  width: 100%;
+  max-width: 30rem;
+  grid-column: 1/3;
+}
+@media screen and (max-width: 1024px) {
+  .btn--wide {
+    max-width: unset;
+  }
+}
+
+.btn-group {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+@media screen and (max-width: 1024px) {
+  .btn-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.error {
+  color: #dd0000;
+  margin-top: 2rem;
+}
+
+.loader {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  z-index: 1000;
+}
+.loader.active {
+  display: block;
+}
+.loader:before {
+  content: "";
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: 100%;
+  background-color: transparent;
+  border: 1.6rem solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  animation: 0.5s loader linear infinite;
+}
+@keyframes loader {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.rayon-container {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.coordinates-container {
+  margin-top: 1rem;
+}
