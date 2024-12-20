@@ -62,7 +62,7 @@ body.is-map-clickable .btn--coords {
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  min-height: calc(100vh - 17rem);
+  min-height: calc(100vh - 20rem);
   aspect-ratio: 1920/1080;
   margin-top: 2rem;
 }
