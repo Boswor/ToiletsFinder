@@ -75,7 +75,7 @@ window.addEventListener('load', (e) => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: "[out:json];node(around:" + inputRadius.value + "," + coordinates.dataset.lat + "," + coordinates.dataset.lon + ")[amenity=toilets];out;"
+            body: "[out:json][timeout:25];(node['amenity'='toilets'](around:" + inputRadius.value + "," + coordinates.dataset.lat + "," + coordinates.dataset.lon + ");way['amenity'='toilets'](around:" + inputRadius.value + "," + coordinates.dataset.lat + "," + coordinates.dataset.lon + "););out geom;"
         }).then(x => x.json()).then(json => {
             if (typeof json.elements != 'undefined') {
                 toilets.forEach((toilet) => {
@@ -91,8 +91,18 @@ window.addEventListener('load', (e) => {
                         }
                     }
                     content += "</div>";*/
-                    let content = '<a target="_blank" href="https://www.google.fr/maps/dir/' + (coordinates.dataset.lat) + ',' + (coordinates.dataset.lon) + '/' + (element.lat) + ',' + (element.lon) + '" class="btn"><span>Go !</span></a>';
-                    let toilet = L.marker([element.lat, element.lon], { icon: toiletIcon }).addTo(macarte).bindPopup(content);
+                    let toiletLat;
+                    let toiletLon;
+                    if (element.type == "node") {
+                        toiletLat = element.lat;
+                        toiletLon = element.lon;
+                    } else {
+                        let toiletCoords = getAverageCoordinatesFromGeometry(element.geometry);
+                        toiletLat = toiletCoords.lat;
+                        toiletLon = toiletCoords.lon;
+                    }
+                    let content = '<a target="_blank" href="https://www.google.fr/maps/dir/' + (coordinates.dataset.lat) + ',' + (coordinates.dataset.lon) + '/' + (toiletLat) + ',' + (toiletLon) + '" class="btn"><span>Go !</span></a>';
+                    let toilet = L.marker([toiletLat, toiletLon], { icon: toiletIcon }).addTo(macarte).bindPopup(content);
                     toilets.push(toilet);
 
                 });
@@ -213,4 +223,40 @@ window.addEventListener('load', (e) => {
             return word;
         }
     }*/
+
+    function getAverageCoordinatesFromGeometry(geometry) {
+        const toRadians = (deg) => (deg * Math.PI) / 180;
+        const toDegrees = (rad) => (rad * 180) / Math.PI;
+
+        // Somme des coordonnées en 3D (cartésiennes)
+        const cartesianSum = geometry.reduce(
+            (acc, point) => {
+                const latRad = toRadians(point.lat);
+                const lonRad = toRadians(point.lon);
+
+                acc.x += Math.cos(latRad) * Math.cos(lonRad);
+                acc.y += Math.cos(latRad) * Math.sin(lonRad);
+                acc.z += Math.sin(latRad);
+                return acc;
+            },
+            { x: 0, y: 0, z: 0 }
+        );
+
+        // Moyenne des points cartésiens
+        const totalPoints = geometry.length;
+        const avgX = cartesianSum.x / totalPoints;
+        const avgY = cartesianSum.y / totalPoints;
+        const avgZ = cartesianSum.z / totalPoints;
+
+        // Reconvertir les coordonnées cartésiennes en latitude/longitude
+        const lon = Math.atan2(avgY, avgX);
+        const hyp = Math.sqrt(avgX * avgX + avgY * avgY);
+        const lat = Math.atan2(avgZ, hyp);
+
+        // Retourner la moyenne en degrés
+        return {
+            lat: toDegrees(lat),
+            lon: toDegrees(lon)
+        };
+    }
 })
